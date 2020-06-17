@@ -8,6 +8,13 @@ public class Player : MonoBehaviour
 	private float _speed = 3.5f;
 	[SerializeField]
 	private float _boundaryX = 10.6f;
+	[SerializeField]
+	private GameObject _laserPrefab;
+	[SerializeField]
+	private float _offset = 0.8f;
+	[SerializeField]
+	private float _fireRate = 0.5f;
+	private float _canFire = -1f;
 	//use _ to denote that variable is private
    
     void Start()
@@ -19,7 +26,17 @@ public class Player : MonoBehaviour
     void Update()
     {
 		CalculateMethod();
+
+		if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+		{
+			FireLaser();
+		}
     }
+	void FireLaser()
+	{
+			_canFire = Time.time + _fireRate;
+			Instantiate(_laserPrefab, transform.position + new Vector3(0, _offset), Quaternion.identity);
+	}
 	void CalculateMethod()
 	{
 		float horizontalInput = Input.GetAxis("Horizontal");

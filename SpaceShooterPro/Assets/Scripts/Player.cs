@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private float _fireRate = 0.5f;
 	private float _canFire = -1f;
+	[SerializeField]
+	private int _lives = 3;
 	//use _ to denote that variable is private
    
     void Start()
@@ -73,6 +75,15 @@ public class Player : MonoBehaviour
 		else if (transform.position.x < -1 * _boundaryX)
 		{
 			transform.position = new Vector3(_boundaryX, transform.position.y, 0);
+		}
+	}
+	public void Damage()
+	{
+		_lives--;
+		
+		if(_lives < 1)
+		{
+			Destroy(this.gameObject);
 		}
 	}
 }

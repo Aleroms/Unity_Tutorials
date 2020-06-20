@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 		
     }
 
-	void OnTriggerEnter(Collider other)
+	void OnTriggerEnter2D(Collider2D other)
 	{
 		//it's better to use other.tag than other.gameObject.tag
 		if(other.tag == "Player")

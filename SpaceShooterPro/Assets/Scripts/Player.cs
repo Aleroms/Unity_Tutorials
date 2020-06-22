@@ -11,10 +11,22 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private GameObject _laserPrefab;
 	[SerializeField]
+	private GameObject _tripleShotPrefab;
+	[SerializeField]
 	private float _fireRate = 0.5f;
 	private float _canFire = -1f;
 	[SerializeField]
+	private float _speedboostMultiplier = 2;
+	[SerializeField]
 	private int _lives = 3;
+	[SerializeField]//for testing purposes
+	private bool _tripleShotEnable = false;
+	[SerializeField]
+	private bool _speedBoostEnable = false;
+	[SerializeField]
+	private float _tripleShotCooldown = 5f;
+	[SerializeField]
+	private float _speedboostCooldown = 5f;
 
 	private SpawnManager _manager;
 	//use _ to denote that variable is private
@@ -43,7 +55,13 @@ public class Player : MonoBehaviour
 	void FireLaser()
 	{
 			_canFire = Time.time + _fireRate;
+
+		if (_tripleShotEnable)
+			Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+		else
 			Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.06f), Quaternion.identity);
+
+		
 	}
 	void CalculateMethod()
 	{
@@ -52,9 +70,12 @@ public class Player : MonoBehaviour
 
 		//move the player
 		Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+		
 		transform.Translate(direction * _speed * Time.deltaTime);
 
+		//y-axis boundary
 		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -2.8f, 2), 0);
+
 
 		//if out of range wrap the player
 		if (transform.position.x >= _boundaryX)
@@ -76,5 +97,27 @@ public class Player : MonoBehaviour
 			_manager.OnPlayerDeath();
 			Destroy(this.gameObject);
 		}
+	}
+	public void TripleShotActive()
+	{
+		_tripleShotEnable = true;
+		StartCoroutine(TripleShotCoroutine());
+	}
+	IEnumerator TripleShotCoroutine()
+	{
+		yield return new WaitForSeconds(_tripleShotCooldown);
+		_tripleShotEnable = false;
+	}
+	public void SpeedBostActive()
+	{
+		_speed *= _speedboostMultiplier;
+		_speedBoostEnable = true;
+		StartCoroutine(SpeedBoostCoroutine());
+	}
+	IEnumerator SpeedBoostCoroutine()
+	{
+		yield return new WaitForSeconds(_speedboostCooldown);
+		_speedBoostEnable = false;
+		_speed /= _speedboostMultiplier;
 	}
 }

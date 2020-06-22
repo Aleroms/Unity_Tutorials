@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
    
     void Update()
     {
-		//Challenge: Initial Implementation 20-29
 		transform.Translate(new Vector3(0, -1, 0) * _speed * Time.deltaTime);
         
 
@@ -44,7 +43,5 @@ public class Enemy : MonoBehaviour
 			Destroy(other.gameObject);
 			Destroy(this.gameObject);
 		}
-
-		
 	}
 }

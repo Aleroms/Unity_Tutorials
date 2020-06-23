@@ -8,38 +8,55 @@ public class Player : MonoBehaviour
 	private float _speed = 3.5f;
 	[SerializeField]
 	private float _boundaryX = 10.6f;
+
 	[SerializeField]
 	private GameObject _laserPrefab;
 	[SerializeField]
 	private GameObject _tripleShotPrefab;
 	[SerializeField]
+	private GameObject _shields;
+
+	[SerializeField]
 	private float _fireRate = 0.5f;
 	private float _canFire = -1f;
 	[SerializeField]
 	private float _speedboostMultiplier = 2;
+
 	[SerializeField]
 	private int _lives = 3;
-	[SerializeField]//for testing purposes
-	private bool _tripleShotEnable = false;
 	[SerializeField]
+	private int _score;
+	
+	private bool _tripleShotEnable = false;
 	private bool _speedBoostEnable = false;
+	private bool _shieldsEnable = false;
+
 	[SerializeField]
 	private float _tripleShotCooldown = 5f;
 	[SerializeField]
 	private float _speedboostCooldown = 5f;
 
 	private SpawnManager _manager;
+	private UIManager _uimanager;
 	//use _ to denote that variable is private
    
     void Start()
     {
 		transform.position = new Vector3(0, 2, 0);
 		_manager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+		_uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+		if(_uimanager == null)
+		{
+			Debug.LogError("UI Manager is NULL");
+		}
 
 		if(_manager == null)
 		{
 			Debug.LogError("Spawn Manager is NULL");
 		}
+		//_shields.transform = gameObject.transform.GetChild(0);
+
 	}
 
   
@@ -87,8 +104,29 @@ public class Player : MonoBehaviour
 			transform.position = new Vector3(_boundaryX, transform.position.y, 0);
 		}
 	}
+
+	public void ShieldsActive()
+	{
+		_shields.SetActive(true);
+		_shieldsEnable = true;
+	}
+	public void ScoreAdd(int num)
+	{
+		_score += num;
+		_uimanager.SetScore(_score);
+
+	}
 	public void Damage()
 	{
+		//if shields is active do nothing
+		if(_shieldsEnable)
+		{
+			_shieldsEnable = false;
+			_shields.SetActive(false);
+			return;
+		}
+		//deactivate shields and return
+
 		_lives--;
 		
 		if(_lives < 1)

@@ -8,7 +8,18 @@ public class Enemy : MonoBehaviour
 	private float _speed = 4f;
 	[SerializeField]
 	private float _respawnBoundaryX = 10.6f;
+	[SerializeField]
+	private int _reward = 10;
+	[SerializeField]
+	private Player _player;
    
+	void Start()
+	{
+		_player = GameObject.Find("Player").GetComponent<Player>();
+
+		if (_player == null)
+			Debug.LogError("player script is null");
+	}
    
     void Update()
     {
@@ -41,6 +52,7 @@ public class Enemy : MonoBehaviour
 		else if(other.tag == "Laser")
 		{
 			Destroy(other.gameObject);
+			_player.ScoreAdd(_reward);
 			Destroy(this.gameObject);
 		}
 	}

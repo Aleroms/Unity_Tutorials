@@ -38,11 +38,11 @@ public class Powerup : MonoBehaviour
 						player.SpeedBostActive();
 						break;
 					case 2:
-						//shield
+						player.ShieldsActive();
 						break;
 				}
 			}
-				player.TripleShotActive();
+				
 		}
 	}
 	

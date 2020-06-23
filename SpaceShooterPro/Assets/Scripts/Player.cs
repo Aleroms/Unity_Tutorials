@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour
 	private bool _tripleShotEnable = false;
 	private bool _speedBoostEnable = false;
 	private bool _shieldsEnable = false;
+	
 
 	[SerializeField]
 	private float _tripleShotCooldown = 5f;
@@ -68,6 +70,7 @@ public class Player : MonoBehaviour
 		{
 			FireLaser();
 		}
+		
     }
 	void FireLaser()
 	{
@@ -128,11 +131,14 @@ public class Player : MonoBehaviour
 		//deactivate shields and return
 
 		_lives--;
+		_uimanager.UpdateLives(_lives);
 		
 		if(_lives < 1)
 		{
 			//let SpawnManager know to stop spawning
+			//let UIManager know to display GAME OVER
 			_manager.OnPlayerDeath();
+			_uimanager.OnPlayerDeath();
 			Destroy(this.gameObject);
 		}
 	}

@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
 	private GameObject _tripleShotPrefab;
 	[SerializeField]
 	private GameObject _shields;
+	[SerializeField]
+	private GameObject _rightEngine;
+	[SerializeField]
+	private GameObject _leftEngine;
 
 	[SerializeField]
 	private float _fireRate = 0.5f;
@@ -58,13 +62,14 @@ public class Player : MonoBehaviour
 			Debug.LogError("Spawn Manager is NULL");
 		}
 		//_shields.transform = gameObject.transform.GetChild(0);
-
+		_rightEngine.SetActive(false);
+		_leftEngine.SetActive(false);
 	}
 
   
     void Update()
     {
-		CalculateMethod();
+		CalculateMovement();
 
 		if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
 		{
@@ -83,7 +88,7 @@ public class Player : MonoBehaviour
 
 		
 	}
-	void CalculateMethod()
+	void CalculateMovement()
 	{
 		float horizontalInput = Input.GetAxis("Horizontal");
 		float verticalInput = Input.GetAxis("Vertical");
@@ -132,7 +137,9 @@ public class Player : MonoBehaviour
 
 		_lives--;
 		_uimanager.UpdateLives(_lives);
-		
+
+		EngineFailure();
+
 		if(_lives < 1)
 		{
 			//let SpawnManager know to stop spawning
@@ -141,6 +148,15 @@ public class Player : MonoBehaviour
 			_uimanager.OnPlayerDeath();
 			Destroy(this.gameObject);
 		}
+	}
+	private void EngineFailure()
+	{
+
+		if (_lives == 2)
+			_leftEngine.SetActive(true);
+		else if (_lives == 1)
+			_rightEngine.SetActive(true);
+
 	}
 	public void TripleShotActive()
 	{

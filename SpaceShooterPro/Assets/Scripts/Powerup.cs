@@ -9,6 +9,9 @@ public class Powerup : MonoBehaviour
 	[SerializeField]
 	private int _powerupID; //0 = TripleShot 1 = Speed 2 = Shield
 
+	[SerializeField]
+	private AudioClip _powerupClip;
+
 
     void Update()
     {
@@ -42,7 +45,7 @@ public class Powerup : MonoBehaviour
 						break;
 				}
 			}
-				
+			AudioSource.PlayClipAtPoint(_powerupClip, transform.position);
 		}
 	}
 	

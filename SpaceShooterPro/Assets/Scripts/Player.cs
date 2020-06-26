@@ -44,11 +44,14 @@ public class Player : MonoBehaviour
 
 	private SpawnManager _manager;
 	private UIManager _uimanager;
+	[SerializeField]
+	private AudioClip _laserClip;
+	private AudioSource _audiosource;
 	//use _ to denote that variable is private
    
     void Start()
     {
-		transform.position = new Vector3(0, 2, 0);
+		//transform.position = new Vector3(0, 2, 0);
 		_manager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
 		_uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -64,6 +67,13 @@ public class Player : MonoBehaviour
 		//_shields.transform = gameObject.transform.GetChild(0);
 		_rightEngine.SetActive(false);
 		_leftEngine.SetActive(false);
+
+		_audiosource = GetComponent<AudioSource>();
+
+		if (_audiosource == null)
+			Debug.LogError("Audio Source is null in Player.cs");
+		else
+			_audiosource.clip = _laserClip;
 	}
 
   
@@ -86,7 +96,7 @@ public class Player : MonoBehaviour
 		else
 			Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.06f), Quaternion.identity);
 
-		
+		_audiosource.Play();
 	}
 	void CalculateMovement()
 	{

@@ -1500,6 +1500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isGameOver: 0
+  isCoopMode: 0
 --- !u!4 &1840802540
 Transform:
   m_ObjectHideFlags: 0

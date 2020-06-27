@@ -47,11 +47,20 @@ public class Player : MonoBehaviour
 	[SerializeField]
 	private AudioClip _laserClip;
 	private AudioSource _audiosource;
+
+	private GameManager _gameManager;
 	//use _ to denote that variable is private
    
     void Start()
     {
+		_gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+		if (_gameManager == null)
+			Debug.LogError("Game Manger is Null");
+
+			///
 		//transform.position = new Vector3(0, 2, 0);
+		
 		_manager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
 		_uimanager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -79,17 +88,18 @@ public class Player : MonoBehaviour
   
     void Update()
     {
-		CalculateMovement();
+			CalculateMovement();
 
-		if(Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
-		{
-			FireLaser();
-		}
+			if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire)
+			{
+				FireLaser();
+			}
 		
     }
 	void FireLaser()
 	{
 			_canFire = Time.time + _fireRate;
+		
 
 		if (_tripleShotEnable)
 			Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);

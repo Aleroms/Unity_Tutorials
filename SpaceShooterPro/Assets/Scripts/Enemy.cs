@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
 	private float _respawnBoundaryX = 10.6f;
 	[SerializeField]
 	private int _reward = 10;
-	[SerializeField]
+
 	private Player _player;
 
 	private Animator _enemyDeath;
@@ -18,6 +18,12 @@ public class Enemy : MonoBehaviour
 	[SerializeField]
 	private AudioClip _explosionClip;
 	private AudioSource _audioSource;
+
+	private float _canFire = -1f;
+	private float _fireRate = 0.5f;
+	[SerializeField]
+	private GameObject _laserPrefab;
+	//private Laser _laser;
    
 	void Start()
 	{
@@ -37,21 +43,43 @@ public class Enemy : MonoBehaviour
 			Debug.LogError("Audio Source is null in Enemy.cs");
 		else
 			_audioSource.clip = _explosionClip;
+
+		
 	}
    
+	void Fire()
+	{
+		_fireRate = Random.Range(3f, 7f);
+		_canFire = Time.time + _fireRate;
+
+		GameObject enemy = Instantiate(_laserPrefab, transform.position, Quaternion.identity);
+		Laser[] laser = enemy.GetComponentsInChildren<Laser>();
+
+		for (int i = 0; i < laser.Length; i++)
+			laser[i].AssignEnemy();
+	}
     void Update()
     {
-		transform.Translate(new Vector3(0, -1, 0) * _speed * Time.deltaTime);
+		CalculateMovement();
         
-
-		//if outside of screen
-		if(transform.position.y <= -5)
+		if( Time.time > _canFire)
 		{
-			float x = Random.Range(-1 * _respawnBoundaryX, _respawnBoundaryX);
-			transform.position = new Vector3(x , 8, 0);
+			Fire();
 		}
+
+		
 		
     }
+	void CalculateMovement()
+	{
+		transform.Translate(new Vector3(0, -1, 0) * _speed * Time.deltaTime);
+		//if outside of screen
+		if (transform.position.y <= -5)
+		{
+			float x = Random.Range(-1 * _respawnBoundaryX, _respawnBoundaryX);
+			transform.position = new Vector3(x, 8, 0);
+		}
+	}
 
 	void OnTriggerEnter2D(Collider2D other)
 	{
@@ -76,6 +104,7 @@ public class Enemy : MonoBehaviour
 			_enemyDeath.SetTrigger("OnEnemyDeath");
 			_speed = 0;
 			_audioSource.Play();
+			Destroy(GetComponent<Collider2D>());
 			Destroy(this.gameObject, 2.633f);
 		}
 	}

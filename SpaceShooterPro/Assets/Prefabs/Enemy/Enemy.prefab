@@ -51,8 +51,9 @@ MonoBehaviour:
   _speed: 4
   _respawnBoundaryX: 10.6
   _reward: 10
-  _player: {fileID: 0}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  _laserPrefab: {fileID: 5687840507494358259, guid: d448a9ad672aa4c47b0e6feca6582b63,
+    type: 3}
 --- !u!50 &634410529669888225
 Rigidbody2D:
   serializedVersion: 4

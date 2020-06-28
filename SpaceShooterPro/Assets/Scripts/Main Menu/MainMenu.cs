@@ -9,13 +9,14 @@ public class MainMenu : MonoBehaviour
 	{
 		SceneManager.LoadScene("Game");
 	}
-	public void LoadCoOp()
+	public void LoadMainMenu()
 	{
-		SceneManager.LoadScene("Co-opPlayer");
+		Time.timeScale = 1;
+		SceneManager.LoadScene("MainMenu");
 	}
-	public void LoadSinglePlayer()
+	public void Quit()
 	{
-		SceneManager.LoadScene("SinglePlayer");
+		Application.Quit();
 	}
   //load the main menu
 }

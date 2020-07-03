@@ -21,4 +21,4 @@ public class LookX : MonoBehaviour {
 
 		transform.localEulerAngles = newRotation;
 	}
-}
+} 

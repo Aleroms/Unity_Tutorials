@@ -14,11 +14,15 @@ public class Player : MonoBehaviour {
 	private GameObject _muzzleFire;
 	[SerializeField]
 	private GameObject _hitMarkerPrefab;
+	[SerializeField]
+	private GameObject _weapon;
 
 	private int _currentAmmo;
 	private int _maxAmmo = 50;
+	private bool _coins = false;
 
 	private bool _isReloading = false;
+
 
 	private UIManager _uiManager;
 	// Use this for initialization
@@ -45,9 +49,9 @@ public class Player : MonoBehaviour {
 
 		if (Input.GetMouseButton(0) && _currentAmmo > 0)
 		{
-			_currentAmmo--;
+			
 			Shoot();
-			_uiManager.UpdateAmmoCount(_currentAmmo);
+			
 		}
 		else
 		{
@@ -70,6 +74,10 @@ public class Player : MonoBehaviour {
 	{
 
 		_muzzleFire.SetActive(true);
+		_currentAmmo--;
+		_uiManager.UpdateAmmoCount(_currentAmmo);
+		if (!_audioSource.isPlaying)
+			_audioSource.Play();
 
 		Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 		RaycastHit hitInfo;
@@ -79,11 +87,17 @@ public class Player : MonoBehaviour {
 			GameObject hit = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
 			Destroy(hit, 0.2f);
 
-		}
-		if (!_audioSource.isPlaying)
-			_audioSource.Play();
+			Destructable crate = hitInfo.transform.GetComponent<Destructable>();
 
-		print(hitInfo.transform.name);
+			if(crate != null)
+			{
+				crate.DestroyCrate();
+			}
+
+		}
+		
+
+		//print(hitInfo.transform.name);
 	}
 	void CalculateMovement()
 	{
@@ -102,5 +116,21 @@ public class Player : MonoBehaviour {
 		_currentAmmo = _maxAmmo;
 		_uiManager.UpdateAmmoCount(_currentAmmo);
 		_isReloading = false;
+	}
+	public void CoinAdd()
+	{
+		_coins = true;
+	}
+	public bool HasCoin()
+	{
+		return _coins;
+	}
+	public void CoinSub()
+	{
+		_coins = false;
+	}
+	public void WeaponEnable()
+	{
+		_weapon.SetActive(true);
 	}
 }

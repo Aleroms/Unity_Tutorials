@@ -105,8 +105,11 @@
      <Compile Include="Assets\Game\Level_Dont_Touch\Standard Assets\Utility\TimedObjectDestructor.cs" />
      <Compile Include="Assets\Game\Level_Dont_Touch\Standard Assets\Utility\WaypointCircuit.cs" />
      <Compile Include="Assets\Game\Level_Dont_Touch\Standard Assets\Utility\WaypointProgressTracker.cs" />
+     <Compile Include="Assets\Game\Scripts\Coin.cs" />
+     <Compile Include="Assets\Game\Scripts\Destructable.cs" />
      <Compile Include="Assets\Game\Scripts\MouseLook.cs" />
      <Compile Include="Assets\Game\Scripts\Player.cs" />
+     <Compile Include="Assets\Game\Scripts\SharkShop.cs" />
      <Compile Include="Assets\Game\Scripts\UIManager.cs" />
      <None Include="Assets\Game\Level_Dont_Touch\Environment_Model\Fonts\OFL.txt" />
      <None Include="Assets\Game\Level_Dont_Touch\Environment_Model\Cinema Suite\Documents\CinemaThemesReadMe.txt" />

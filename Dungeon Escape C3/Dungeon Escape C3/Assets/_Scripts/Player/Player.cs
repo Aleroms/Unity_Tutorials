@@ -32,8 +32,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if UNITY_ANDROID
         Movement();
         Attack();
+#endif
         
     }
     void Attack()

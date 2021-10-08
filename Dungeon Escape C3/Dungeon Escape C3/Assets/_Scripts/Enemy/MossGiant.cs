@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class MossGiant : Enemy
 {
-	public override void Update()
+	//use for Initialization
+	public override void Init()
 	{
-		Debug.Log("Moss Giant updating");
+		base.Init();
 	}
 
-	// Start is called before the first frame update
-	void Start()
-    {
-        Attack();
-    }
 
 }

@@ -16,7 +16,8 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 currentTarget;
     protected Animator animator;
     protected SpriteRenderer sprite;
-
+	protected GameObject player;
+	protected bool isHit = false;
 	private void Start()
 	{
 		Init();
@@ -24,7 +25,7 @@ public abstract class Enemy : MonoBehaviour
 	public virtual void Update()
 	{
 		//waits till idle.anim is done playing before moving monster
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && animator.GetBool("inCombat") == false)
 			return;
 
 		Movement();
@@ -33,6 +34,7 @@ public abstract class Enemy : MonoBehaviour
 	{
         animator = GetComponentInChildren<Animator>();
         sprite = GetComponentInChildren<SpriteRenderer>();
+		player = GameObject.Find("Player");
     }
     public virtual void Movement()
 	{
@@ -56,7 +58,15 @@ public abstract class Enemy : MonoBehaviour
 
 		}
 
-		transform.position = Vector3.MoveTowards(transform.position, currentTarget, step);
+		if(!isHit)
+			transform.position = Vector3.MoveTowards(transform.position, currentTarget, step);
+
+		float distance = Vector3.Distance(transform.localPosition, player.transform.localPosition);
+		if(distance > 2f)
+		{
+			isHit = false;
+			animator.SetBool("inCombat", false);
+		}
 	}
     //public abstract void Update();
 	//forces inherited objects to implement an override for Update()

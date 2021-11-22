@@ -12,12 +12,15 @@ public abstract class Enemy : MonoBehaviour
     protected int gems;
     [SerializeField]
     protected Transform pointA, pointB;//[] waypoints;
+	[SerializeField]
+	protected GameObject diamonds;
 
     protected Vector3 currentTarget;
     protected Animator animator;
     protected SpriteRenderer sprite;
 	protected GameObject player;
 	protected bool isHit = false;
+	protected bool isDead = false;
 	private void Start()
 	{
 		Init();
@@ -28,7 +31,8 @@ public abstract class Enemy : MonoBehaviour
 		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") && animator.GetBool("inCombat") == false)
 			return;
 
-		Movement();
+		if(isDead == false)
+			Movement();
 	}
     public virtual void Init()
 	{
@@ -62,10 +66,21 @@ public abstract class Enemy : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, currentTarget, step);
 
 		float distance = Vector3.Distance(transform.localPosition, player.transform.localPosition);
-		if(distance > 2f)
+		if (distance > 2f)
 		{
 			isHit = false;
 			animator.SetBool("inCombat", false);
+		}
+
+
+		Vector3 direction = player.transform.localPosition - transform.localPosition;
+		//if direction is negative face left (flip)
+		if (animator.GetBool("inCombat"))
+		{
+			if (direction.x < 0)
+				sprite.flipX = true;
+			else
+				sprite.flipX = false;
 		}
 	}
     //public abstract void Update();

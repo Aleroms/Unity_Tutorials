@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IDamagable
 {
-    //get ref to rb
-    //get ref to playerAnim script
+    public int diamonds;
     private Rigidbody2D _rb;
     [SerializeField]
     private float _jumpForce = 5.0f;
@@ -20,8 +19,10 @@ public class Player : MonoBehaviour
     private SpriteRenderer _playerSprite;
     private SpriteRenderer _swordSprite;
 
-    // Start is called before the first frame update
-    void Start()
+	public int Health { get ; set ; }
+
+	// Start is called before the first frame update
+	void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _playerAnim = GetComponent<PlayerAnimation>();
@@ -107,5 +108,9 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.9f);
         _resetJump = false;
 	}
-    
+
+	public void Damage()
+	{
+        Debug.Log("Not implemented yet");
+	}
 }

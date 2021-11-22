@@ -10,14 +10,29 @@ public class Skeleton : Enemy, IDamagable
 		base.Init();
 		Health = base.health;
 	}
+	public override void Movement()
+	{
+		base.Movement();
+
+	
+	}
 	public void Damage()
 	{
-		Debug.Log("Damage()");
+		if (isDead) return;
+		Debug.Log("Skeleton::Damage()");
 		Health--;
 		animator.SetTrigger("Hit");
 		isHit = true;
 		animator.SetBool("inCombat", true);
+
+		Debug.Log(Health);
 		if (Health < 1)
-			Destroy(gameObject);
+		{
+			isDead = true;
+			animator.SetTrigger("Death");
+
+			GameObject diamond = Instantiate(diamonds, transform.position, Quaternion.identity);
+			 diamond.GetComponent<Diamond>().valueOfDiamond = 3;
+		}
 	}
 }

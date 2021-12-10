@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,7 +17,10 @@ public class UIManager : MonoBehaviour
 		}
 	}
 	public Text playerGemCount;
+	public Text gemCountText;
 	public Image selectionSlider;
+	public Image[] healthbar;
+	
 
 	
 	private void Awake()
@@ -32,5 +36,19 @@ public class UIManager : MonoBehaviour
 	{
 		selectionSlider.rectTransform.anchoredPosition = new Vector2(selectionSlider.rectTransform.anchoredPosition.x, yPos);
 	}
-	
+	public void UpdateGemCount(int count)
+	{
+		gemCountText.text = count.ToString();
+	}
+
+	public void UpdateLives(int health)
+	{
+		for(int i = 0; i <= health; i++)
+		{
+			if(i == health)
+			{
+				healthbar[i].enabled = false;
+			}
+		}
+	}
 }

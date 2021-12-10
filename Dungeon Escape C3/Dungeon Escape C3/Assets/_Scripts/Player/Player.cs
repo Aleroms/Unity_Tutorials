@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.CrossPlatformInput;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour, IDamagable
         _playerAnim = GetComponent<PlayerAnimation>();
         _playerSprite = GetComponentInChildren<SpriteRenderer>();
         _swordSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        Health = 4;
     }
 
     // Update is called once per frame
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour, IDamagable
     }
     void Attack()
 	{
-        if (isGrounded() && Input.GetKeyDown(KeyCode.Mouse0))
+        if (isGrounded() && CrossPlatformInputManager.GetButtonDown("A_Button"))
             _playerAnim.Attack();
 	}
     void FlipSprite(float h)
@@ -73,13 +75,15 @@ public class Player : MonoBehaviour, IDamagable
 	{
         //GetAxisRaw is either -1,0, or 1; avoids gradual increase/decrease
         //reduces slide in animation from run to idle, etc
-        float horizontal = Input.GetAxisRaw("Horizontal");
+        //crossplatformInput works on pc and mobile
+        float horizontal = CrossPlatformInputManager.GetAxis("Horizontal"); //Input.GetAxisRaw("Horizontal");
         _isGrounded = isGrounded();
 
         FlipSprite(horizontal);
 
-        if(isGrounded() && Input.GetKeyDown(KeyCode.Space))
-		{
+        //jump
+        if (isGrounded() && (Input.GetKeyDown(KeyCode.Space) || CrossPlatformInputManager.GetButtonDown("B_button")))
+        {
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
             StartCoroutine(ResetJumpCoroutine());
             _playerAnim.Jumping(true);
@@ -111,6 +115,18 @@ public class Player : MonoBehaviour, IDamagable
 
 	public void Damage()
 	{
-        Debug.Log("Not implemented yet");
+        if (Health < 1) return;
+        Health--;
+        UIManager.Instance.UpdateLives(Health);
+
+        if(Health < 1)
+		{
+            _playerAnim.Death();
+		}
+	}
+    public void AddGems(int amount)
+	{
+        diamonds += amount;
+        UIManager.Instance.UpdateGemCount(diamonds);
 	}
 }
